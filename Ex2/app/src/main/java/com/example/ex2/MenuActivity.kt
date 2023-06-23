@@ -23,7 +23,11 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
         ActivityResultContracts.StartActivityForResult()
     ) {
         if(it.resultCode == Activity.RESULT_OK){
-            val memo = it.data?.getStringExtra("memo")
+            val memo = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                it.data?.getParcelableExtra("memo", Memo::class.java)
+            }else{
+                it.data?.getParcelableExtra<Memo>("memo")
+            }
             memo?.let { memo ->
                 category?.memo?.add(memo)
             }
@@ -31,7 +35,11 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
         }
 
         if(it.resultCode == Activity.RESULT_OK + 1){
-            val memo = it.data?.getStringExtra("rename")
+            val memo = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                it.data?.getParcelableExtra("rename", Memo::class.java)
+            }else{
+                it.data?.getParcelableExtra<Memo>("rename")
+            }
             val position = it.data?.getIntExtra("position", -1)
 
 
@@ -64,12 +72,15 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
 
         categoryPosition = intent.getIntExtra("categoryToMemoPosition", -1)
 
-        val copyCategory = category as Category
         //Log.d("memoActivity", "${copyCategory.memo.size}")
         //Log.d("memoActivity", "$category, $categoryPosition")
 
         binding.memoRecycler.apply {
-            adapter = category?.memo?.let {memo -> MemoRecyclerViewAdapter(memo, category?.title, this@MenuActivity) }
+            adapter = category?.memo?.let {memo -> MemoRecyclerViewAdapter(memo, category?.title, this@MenuActivity){
+                val intent = Intent(this@MenuActivity, MenuDetail::class.java)
+                intent.putExtra("memo", memo[it])
+                requestLauncher.launch(intent)
+            } }
             layoutManager = LinearLayoutManager(this@MenuActivity)
         }
 
@@ -87,7 +98,6 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
 
 
     override fun onDestroy() {
-
         super.onDestroy()
     }
 
@@ -102,9 +112,7 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
             setResult(900, intent)
             finish()
         }
-
         return super.onBackPressed()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,7 +139,7 @@ class MenuActivity() : AppCompatActivity(), menuInterface{
                     position?.let { pos ->
                         val intent = Intent(this, renameMemo::class.java)
                         intent.putExtra("title", category.title)
-                        intent.putExtra("renameMemo", category.memo[pos])
+                        intent.putExtra("memo", category.memo[pos])
                         intent.putExtra("position", pos)
                         requestLauncher.launch(intent)
                     }

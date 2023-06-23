@@ -7,6 +7,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import com.example.ex2.databinding.ActivityRenameMemoBinding
 import kotlin.concurrent.thread
@@ -18,14 +19,19 @@ class renameMemo : AppCompatActivity() {
         binding = ActivityRenameMemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val title = intent.getStringExtra("title")
-        val memo = intent.getStringExtra("renameMemo")
+        val memo = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            intent.getParcelableExtra("memo", Memo::class.java)
+        }else{
+            intent.getParcelableExtra<Memo>("memo")
+        }
         val position = intent.getIntExtra("position", -1)
 
+        val title = intent.getStringExtra("title")
 
         //변경 전 이름
         binding.categoryTitleTextView.text = title
-        binding.titleTextView.text = memo
+        binding.titleEditTextView.setText(memo?.title)
+        binding.contentEditTextView.setText(memo?.content)
 
         val imn = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         //에디트 텍스트에 포커스 두기
@@ -54,7 +60,7 @@ class renameMemo : AppCompatActivity() {
             if(binding.titleEditTextView.text.toString().isEmpty()){
                 Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
             }else{
-                val renameMemo = binding.titleEditTextView.text.toString()
+                val renameMemo = Memo(binding.titleEditTextView.text.toString(), binding.contentEditTextView.text.toString())
                 intent.putExtra("rename", renameMemo)
                 intent.putExtra("position", position)
                 hideFocus(imn)
@@ -71,7 +77,7 @@ class renameMemo : AppCompatActivity() {
                     Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
                     false
                 }else{
-                    val renameMemo = binding.titleEditTextView.text.toString()
+                    val renameMemo = Memo(binding.titleEditTextView.text.toString(), binding.contentEditTextView.text.toString())
                     intent.putExtra("rename", renameMemo)
                     intent.putExtra("position", position)
                     hideFocus(imn)

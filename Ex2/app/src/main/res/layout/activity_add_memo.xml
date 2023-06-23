@@ -6,14 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".addMemo">
 
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:text="제목"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="28dp"
+        />
     <EditText
         android:id="@+id/titleEditTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textAutoComplete"
-        android:layout_marginTop="16dp"
-        android:hint="메모 작성해주세요"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginTop="3dp"
+        android:hint="메모 제목 작성해주세요"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"/>
+
+    <TextView
+        android:id="@+id/contentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="내용"
+        android:textSize="28dp"
+        app:layout_constraintTop_toBottomOf="@id/titleEditTextView"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:id="@+id/contentEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintTop_toBottomOf="@id/contentTextView"
+        android:hint="내용 작성"
+        android:gravity="top"
+        android:background="@color/white"
+        />
 
     <Button
         android:id="@+id/sendButton"
@@ -24,7 +57,7 @@
         android:text="@string/send"
         app:layout_constraintEnd_toStartOf="@id/cancelButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleEditTextView" />
+        app:layout_constraintTop_toBottomOf="@id/contentEditTextView" />
 
     <Button
         android:id="@+id/cancelButton"
@@ -32,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleEditTextView"
+        app:layout_constraintTop_toBottomOf="@id/contentEditTextView"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
         app:layout_constraintStart_toEndOf="@id/sendButton"

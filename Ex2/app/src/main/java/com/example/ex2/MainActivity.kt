@@ -28,12 +28,15 @@ class MainActivity : AppCompatActivity(), positionInteface {
     private val requestLauncher  = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
+
+        //add Category
         if(it.resultCode == Activity.RESULT_OK){
             val resultData = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                 it.data?.getParcelableExtra("category", Category::class.java)
             }else{
                 it.data?.getParcelableExtra<Category>("category")
             }
+            //Category?
 
             //Toast.makeText(this, "받아온 데이터 $resultData", Toast.LENGTH_SHORT).show()
             resultData?.let { Category ->
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity(), positionInteface {
             binding.recyclerView.adapter?.notifyDataSetChanged()
         }
 
+        //메모 액티비티 실행 결과 반환값
         if(it.resultCode == 900){
 
             //Toast.makeText(this, "메모 액티비티 종료로 여기가 실행된다", Toast.LENGTH_SHORT).show()

@@ -37,10 +37,10 @@ class renameCategory : AppCompatActivity() {
 
 
         //텍스트 완료 눌렀을 때
-        editTextButton(imn, position)
+        editTextButton(imn, position, category)
 
         //버튼 확인 눌렀을 때
-        selectButton(imn, position)
+        selectButton(imn, position, category)
 
         //버튼 취소 눌렀을
         cancelButton(imn)
@@ -53,37 +53,43 @@ class renameCategory : AppCompatActivity() {
         }
     }
 
-    private fun selectButton(imn: InputMethodManager, position: Int) {
+    private fun selectButton(imn: InputMethodManager, position: Int, category: Category?) {
         binding.sendButton.setOnClickListener {
-            if(binding.titleEditTextView.text.toString().isEmpty()){
-                Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }else{
-                val rename = binding.titleEditTextView.text.toString()
-                intent.putExtra("rename", Category(rename))
-                intent.putExtra("position", position)
-                hideFocus(imn)
-                setResult(RESULT_OK+1, intent)
-                finish()
+            category?.let {
+                if(binding.titleEditTextView.text.toString().isEmpty()){
+                    Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }else{
+                    val rename = binding.titleEditTextView.text.toString()
+                    intent.putExtra("rename", Category(rename, it.memo))
+                    intent.putExtra("position", position)
+                    hideFocus(imn)
+                    setResult(RESULT_OK+1, intent)
+                    finish()
+                }
             }
         }
     }
 
-    private fun editTextButton(imn: InputMethodManager, position : Int) {
+    private fun editTextButton(imn: InputMethodManager, position : Int, category: Category?) {
         binding.titleEditTextView.setOnEditorActionListener { textView, i, keyEvent ->
             if(i == EditorInfo.IME_ACTION_DONE){
-                if(binding.titleEditTextView.text.toString().isEmpty()){
-                    Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                    false
-                }else{
-                    val rename = binding.titleEditTextView.text.toString()
-                    intent.putExtra("rename", Category(rename))
-                    intent.putExtra("position", position)
-                    hideFocus(imn)
+                category?.let {
+                    if(binding.titleEditTextView.text.toString().isEmpty()){
+                        Toast.makeText(this, "빈 값은 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        false
+                    }else{
+                        val rename = binding.titleEditTextView.text.toString()
+                        intent.putExtra("rename", Category(rename, it.memo))
+                        intent.putExtra("position", position)
+                        hideFocus(imn)
 
-                    setResult(RESULT_OK+1, intent)
-                    finish()
-                    true
+                        setResult(RESULT_OK+1, intent)
+                        finish()
+                        true
+                    }
                 }
+
+                false
             }else{
                 false
             }

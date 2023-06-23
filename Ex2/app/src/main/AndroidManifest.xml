@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Ex2"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".MenuDetail"
+            android:exported="false" />
+        <activity
             android:name=".renameMemo"
             android:exported="false" />
         <activity

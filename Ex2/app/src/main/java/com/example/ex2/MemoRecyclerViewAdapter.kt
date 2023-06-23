@@ -11,7 +11,7 @@ import com.example.ex2.databinding.ActivityMainBinding
 import com.example.ex2.databinding.CategoryListBinding
 import com.example.ex2.databinding.MemoListBinding
 
-class MemoRecyclerViewAdapter(val dataList: MutableList<String>,val title : String? ,val activity: Activity) : RecyclerView.Adapter<MemoRecyclerViewAdapter.MemoRecyclerViewHolder>(){
+class MemoRecyclerViewAdapter(val dataList: MutableList<Memo>,val title : String? ,val activity: Activity,val  onClick :(Int) -> Unit ) : RecyclerView.Adapter<MemoRecyclerViewAdapter.MemoRecyclerViewHolder>(){
 
 
     inner class MemoRecyclerViewHolder(private val binding: MemoListBinding) : RecyclerView.ViewHolder(binding.root){
@@ -19,7 +19,7 @@ class MemoRecyclerViewAdapter(val dataList: MutableList<String>,val title : Stri
 
         fun bind(position: Int){
             binding.categoryTextView.text = title
-            binding.memoTextView.text = dataList[position]
+            binding.memoTextView.text = dataList[position].title
 
             binding.frame.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
                 val p = activity as menuInterface
@@ -27,13 +27,12 @@ class MemoRecyclerViewAdapter(val dataList: MutableList<String>,val title : Stri
                 activity.menuInflater.inflate(R.menu.memo_menu_select, contextMenu)
             }
 
-//            itemView.setOnClickListener {
-//                onClick(position)
-//            }
+            itemView.setOnClickListener {
+                onClick(position)
+            }
         }
 
     }
-
 
     override fun onBindViewHolder(holder: MemoRecyclerViewHolder, position: Int) {
         holder.bind(position)

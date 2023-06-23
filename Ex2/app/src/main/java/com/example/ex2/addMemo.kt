@@ -48,11 +48,12 @@ class addMemo : AppCompatActivity() {
 
     fun clickSendButton(imn: InputMethodManager){
         binding.sendButton.setOnClickListener {
-            if(binding.titleEditTextView.text.isEmpty()){
+            if(binding.titleEditTextView.text.isEmpty() || binding.contentEditTextView.text.toString().isEmpty()){
                 Toast.makeText(this, "빈 값을 입력하면 안됩니다.", Toast.LENGTH_SHORT).show()
             }else{
-                val memo = binding.titleEditTextView.text.toString()
-                intent.putExtra("memo", memo)
+                val memoTitle = binding.titleEditTextView.text.toString()
+                val memoContent = binding.contentEditTextView.text.toString()
+                intent.putExtra("memo", Memo(memoTitle, memoContent))
                 Toast.makeText(this, "저장 완료!!", Toast.LENGTH_SHORT).show()
                 hideFocus(imn)
 
@@ -77,8 +78,9 @@ class addMemo : AppCompatActivity() {
                     Toast.makeText(this, "빈 값을 입력하면 안됩니다.", Toast.LENGTH_SHORT).show()
                     false
                 }else{
-                    val memo = binding.titleEditTextView.text.toString()
-                    intent.putExtra("memo", memo)
+                    val memoTitle = binding.titleEditTextView.text.toString()
+                    val memoContent = binding.contentEditTextView.text.toString()
+                    intent.putExtra("memo", Memo(memoTitle, memoContent))
                     Toast.makeText(this, "저장 완료!!", Toast.LENGTH_SHORT).show()
                     hideFocus(imn)
 

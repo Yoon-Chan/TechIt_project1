@@ -21,7 +21,10 @@ class addCategory : AppCompatActivity() {
         binding = ActivityAddCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //입력관리 imn
         val imn : InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+
         //자동으로 에디트 텍스트에 포커스 설정하기
         requestFocus(imn)
 
